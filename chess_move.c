@@ -650,7 +650,7 @@ if (Pieces[Cur_Position].TYPE == PAWN ){
                  // remove enemy pawn
 				 				if (version == 1){
 								Pieces[Cur_Position].FirstMove = NA;}
-								printf("enpassente black \n");
+				//				printf("enpassente black \n");
 								return 1;}
 								}
 						else if (Pieces[Cur_Position].Player.Color == WHITE){
@@ -658,7 +658,7 @@ if (Pieces[Cur_Position].TYPE == PAWN ){
                  // need dto add remove enemy pawn
 				 				if (version == 1){
 								Pieces[Cur_Position].FirstMove = NA;}
-								printf("enpassente white \n");
+			//					printf("enpassente white \n");
 								return 1;}
 								}
 							}
