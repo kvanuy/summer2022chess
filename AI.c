@@ -141,20 +141,20 @@ void AIMove(){
  
   //loop that checks for the current locations of all the opponent pieces on the board
   for (i=0; i<64; i++) {
-    if (Pieces[i].Player.Color == MainMenuState3()){
+    if (Pieces[i].Player.Color == globalPlayerTurn){
       AppendMove(CurrentPieces,i,j);
       }
   }
 
   for (i=0; i<64; i++) {
     //inner loop
-         first_move_holder = Pieces[i].FirstMove; // temp storage
+       
     for (j=0; j<64; j++){
       //makes legal moves for each piece
       CheckMove(i,j,0);
-          Pieces[i].FirstMove = first_move_holder; // restores
+      
       if (CheckMove(i,j,0) == 1){
-         if (Pieces[i].Player.Color == (3 + MainMenuState3()) % 2){
+         if (Pieces[i].Player.Color == globalPlayerTurn){
            if (i != j){
             AppendMove(AIMoves,i,j);
               }
@@ -163,40 +163,24 @@ void AIMove(){
       }
     }
 
+    // consider asserts
+
+assert(CurrentPieces->First != NULL);
+assert(AIMoves->First != NULL);
+
+
     Chess_move *oppPiece = CurrentPieces->First;
     Chess_move *curpos = AIMoves->First;
     //Test code that checks if all the positions of the pieces are recovered
-    /*while(oppPiece){
-      printf("Current Postition of the white pieces are (%d,%d)\n",oppPiece->Cur_position,oppPiece->New_position);
-      oppPiece = oppPiece->Next;
-    }*/
+
     //loop that assigns points to each move
     int totalmoves = 0;
     while(curpos){
       curpos->points = 0;
-      //printf("Current Postition, Final position, and points are (%d,%d,%d)\n",curpos->Cur_position,curpos->New_position,curpos->points);
-      //if current position of white = new position of black - award points
-      /*if (curpos->New_position == oppPiece->Cur_position){
-        if (Pieces[oppPiece->Cur_position].TYPE == 1){
-          curpos->points = 1;
-        }
-        else if (Pieces[oppPiece->Cur_position].TYPE == 2){
-          curpos->points = 5;
-        }
-        else if (Pieces[oppPiece->Cur_position].TYPE == 3){
-          curpos->points = 3;
-        }
-        else if (Pieces[oppPiece->Cur_position].TYPE == 4){
-          curpos->points = 3;
-        }
-        else if (Pieces[oppPiece->Cur_position].TYPE == 5){
-          curpos->points = 9;
-        }
-      }*/
+
       curpos = curpos->Next;
       totalmoves++;
-      //printf("oppPiece not null");
-      //oppPiece = oppPiece->Next;
+
     }
 
     //printf("broke before curpos assignment \n");
@@ -222,19 +206,19 @@ void AIMove(){
       int randomMove = rand() % totalmoves;
       temp = AIMoves->First;
       int n;
-      for(n=0; n<=randomMove; n++){
+      for(n=0; n<randomMove; n++){
         temp = temp->Next;
       }
     }
 
- //   printf("AI move list generated\n");
-    //printf("Grand total of %d possible moves!\n",AIMoves->Length);
-  //  printf("The best possible move is (%d,%d,%d)\n",temp->Cur_position,temp->New_position,temp->points);
-
+ /*   printf("AI move list generated\n");
+    printf("Grand total of %d possible moves!\n",AIMoves->Length);
+    printf("The best possible move is (%d,%d,%d)\n",temp->Cur_position,temp->New_position,temp->points);
+*/
      sentcurposition = temp->Cur_position;
      sentnewposition = temp->New_position;
      logfile(sentcurposition,sentnewposition);
-    printf("Testing current and new position: (%d,%d)\n",sentcurposition ,sentnewposition);
+  //  printf("Testing current and new position: (%d,%d)\n",sentcurposition ,sentnewposition);
     CheckMove(sentcurposition, sentnewposition,1);
     Move_Piece(sentcurposition, sentnewposition);
     
@@ -276,18 +260,17 @@ void JungKook(){
 
   //loop that checks for the current locations of all the opponent pieces on the board
   for (i=0; i<64; i++) {
-    if (Pieces[i].Player.Color == (3 + MainMenuState3()) % 2){
+    if (Pieces[i].Player.Color == globalPlayerTurn){
       AppendMove(CurrentPieces,i,j);
       }
   }
 
   for (i=0; i<64; i++) {
     //inner loop
-     first_move_holder = Pieces[i].FirstMove; // temp storage for firstmove
+    
     for (j=0; j<64; j++){
       //makes legal moves for each piece
       CheckMove(i,j,0);
-      Pieces[i].FirstMove = first_move_holder;
       
       if (CheckMove(i,j,0) == 1){
          if (Pieces[i].Player.Color == MainMenuState3()){
@@ -298,14 +281,16 @@ void JungKook(){
          }
       }
     }
+   assert(CurrentPieces->First != NULL);
+assert(AIMoves->First != NULL);
 
     Chess_move *oppPiece = CurrentPieces->First;
     Chess_move *curpos = AIMoves->First;
     //Test code that checks if all the positions of the pieces are recovered
-    /*while(oppPiece){
-      printf("Current Postition of the white pieces are (%d,%d)\n",oppPiece->Cur_position,oppPiece->New_position);
+    while(oppPiece){
+  //    printf("Current Postition of the white pieces are (%d,%d)\n",oppPiece->Cur_position,oppPiece->New_position);
       oppPiece = oppPiece->Next;
-    }*/
+    }
     //loop that assigns points to each move
     int totalmoves = 0;
     while(curpos){
@@ -341,7 +326,7 @@ void JungKook(){
     //printf("broke after curpos assignment \n");
     Chess_move *temp = AIMoves->First;
     int similarmoves = 0;
-    //printf("seg fault before here");
+ //   printf("seg fault before here");
     while(curpos){
       if (curpos->points > temp->points){
         temp = curpos;
@@ -360,7 +345,7 @@ void JungKook(){
       int randomMove = rand() % totalmoves;
       temp = AIMoves->First;
       int n;
-      for(n=0; n<=randomMove; n++){
+      for(n=0; n<randomMove; n++){
         temp = temp->Next;
       }
     }
@@ -374,7 +359,7 @@ void JungKook(){
 
 
      //logfile(sentcurposition,sentnewposition);
-     printf("Jungkook [BTS]: Move %s to %s. %s\n", boxes[sentcurposition],boxes[sentnewposition],jungkookquotes[rand()%6]);
+  //   printf("Jungkook [BTS]: Move %s to %s. %s\n", boxes[sentcurposition],boxes[sentnewposition],jungkookquotes[rand()%6]);
      
     //printf("Testing current and new position: (%d,%d)\n",sentcurposition ,sentnewposition);
 

@@ -11,4 +11,6 @@
 #include<math.h>
 #include<assert.h>
 
+int globalPlayerTurn;
+
 #endif 

@@ -7,7 +7,7 @@
 #include "logfile.h"
 
 int logfile(int sentcurposition, int sentnewposition) {
-FILE *file = fopen("/users/ugrad2/2017/winter/team8/chess/src/logfile.txt", "a");
+FILE *file = fopen("/users/ugrad/kvanuy/project/chesssummer/logfile.txt", "a");
 if (file == NULL) {
       printf("Error opening file!\n");
       fclose(file);
@@ -28,4 +28,6 @@ if (file == NULL) {
   fprintf(file, "Move from %s to %s\n", boxes[sentcurposition],boxes[sentnewposition]);
 
   fclose(file);
+  return 0;
+  
 }

@@ -4,6 +4,7 @@
 #include "AI.h"
 #include "logfile.h"
 
+
 /*changes - revamped so that instead of typing a number to select which piece to move
 and a number for a location, you can type in the coordinate to move it there */
 
@@ -25,7 +26,7 @@ int main(){
   char letters[9] = "abcdefgh";
   char numbers[9] = "12345678";
   char initial_message[100] = "\nJungkook [BTS] - \"AYO LADIES AND GENTLEMENN--\n";
-  char end_message[220] = "\nThank you for checking out JUNGKOOK CHESS. We have to let you go now ... \n Jungkook [BTS] - \"But you're my everything ... I NEED U GIRLL WAE\"";
+  char end_message[220] = "\nThank you for checking out JUNGKOOK CHESS. We have to let you go now ... \n Jungkook [BTS] - \"But you're my everything ... I NEED U GIRLL WAE\"\n";
   char winning_message[220] = "\nJungkook [BTS] - \"Another trophy, my hands carry 'em \n Too many that I can't even count 'em (Turn it up now) \n Mic drop, \t mic drop\"\n";
 
 
@@ -51,6 +52,8 @@ int main(){
      if (playercolor == -1){
          gamestate =0;}}
 
+globalPlayerTurn = Player_Turn_Color;
+
   if (gamestate != 0){
   printf("%s", initial_message);
 	//actual chess game starts here
@@ -61,6 +64,13 @@ int main(){
 
 if (playercolor != Player_Turn_Color){
   printf("%s must wait for %s to make a move\n", Colors[playercolor], Colors[Player_Turn_Color]);
+  if (AIorPvP ==1){
+  AIMove(); // AI plays white
+Player_Turn_Color = !Player_Turn_Color; // changes from white to black to allow the player to play
+  globalPlayerTurn = Player_Turn_Color;
+ 	Get_board();
+	Print_board();
+  }
   }}
 
 	while (gamestate == 1){
@@ -84,7 +94,7 @@ if (checkmate(check, Player_Turn_Color )==1){
 
      printf("%s's turn\n", Colors[Player_Turn_Color]);
 
-   if (jungkookie == 1){
+   if (jungkookie == 1 && playercolor == Player_Turn_Color){
     JungKook();
 	}
   	//need to scan for the type of piece
@@ -239,32 +249,41 @@ if (('a' <= NewPositionText[0] && 'h' >= NewPositionText[0])&&
     printf("please try again:\n");}}
 		}
 		Move_Piece(CurPosition, NewPosition);
+   printf("/n after move 1 \n");
 		logfile(CurPosition,NewPosition);
+   printf("/n after log file\n");
     Castling(NewPosition);
+    printf("/n after castling 1 \n");
     enpassant_risk_pawn_location = ENPASSANT(enpassant_risk_pawn_location, NewPosition);
     Promotion(NewPosition,0);
 		//Get_board();
 }
-else{Player_Turn_Color = !Player_Turn_Color; // changes from white to black to allow the player to play
-}
+Player_Turn_Color = !Player_Turn_Color; // changes from white to black to allow the player to play
+  globalPlayerTurn = Player_Turn_Color;
+
 		//This part is the AI moving the piece - testing the AI out by moving pawns
 if (AIorPvP ==1){
-check = kingcheck(FillerValue, FillerValue, !Player_Turn_Color);
+check = kingcheck(FillerValue, FillerValue, Player_Turn_Color);
 if (check==1){
-    printf("\n%s king is in check \n", Colors[!Player_Turn_Color]);}
+    printf("\n%s king is in check \n", Colors[Player_Turn_Color]);}
 
-if (checkmate(check, !Player_Turn_Color )==1){
+if (checkmate(check, Player_Turn_Color )==1){
 		Get_board();
 		Print_board();
   printf("%s", winning_message);
   gamestate = 0;
   continue;
+
 }
-		AIMove();}
+		AIMove();
+       Player_Turn_Color = !Player_Turn_Color;
+    globalPlayerTurn = Player_Turn_Color; }
 		Get_board();
 		Print_board();
-if (AIorPvP ==0){ // we need to to switch between ai or pvp mode
-    Player_Turn_Color = !Player_Turn_Color;} // 0 to 1 black white;
+ // maybe we need to delete
+ 
+     // 0 to 1 black white;
+    
     userinputStage = 1;
 
 
